@@ -1,16 +1,15 @@
-const newGame = (gameState, setState) => {
+const newGame = gameState => {
   setTimeout(() => {
-    setState(gameState, "gameInitialized", true);
-    setState(gameState, "title", "Room title");
-    console.log(setState);
+    gameState.gameInitialized = true
+    gameState.title = "Room title"
   }, 500);
 
   setTimeout(() => {
-    let player = gameState.players[4];
-
-    if (!player) {
-      setState(gameState.players, 4, { id: 4, username: "Tyler" });
-    }
+    gameState.players = Object.assign(
+      {}, 
+      gameState.players, 
+      {'4': { id: 4, username: 'Tyler' }}
+    );
   }, 2500);
 
   return { some: "game", object: "goes", in: "here" };

@@ -26,7 +26,7 @@ export default class App extends Vue {
   gameState = { gameInitialized: false, players: [] };
   
   mounted() {
-    this.gameInterface.launch(this.gameState, Vue.set)
+    this.gameInterface.launch(this.gameState)
   }
   
   get currentPlayer() {
