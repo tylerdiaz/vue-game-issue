@@ -1,12 +1,49 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <h1 v-if="!user.authenticated">Loading user...</h1>
+    <h1 v-else>Welcome, {{user.username}}</h1>
+    <div v-if="currentPlayer">
+      <p>Here is the current player</p>
+      <code>{{currentPlayer}}</code>
     </div>
-    <router-view/>
+    <div v-else>
+      <p>No currentPlayer object to show</p>
+    </div>
+
   </div>
 </template>
+<script>
+import { Vue, Component } from 'vue-property-decorator';
+import GameInterface from './gameInterface';
+
+@Component
+export default class App extends Vue {
+  initDate = Date.now(); // used to simulate async
+  user = { id: null, username: '', authenticated: false };
+  gameInterface = GameInterface();
+
+  mounted() {
+    console.clear();
+    setTimeout(() => {
+      this.user = { id: 4, username: 'Tyler', authenticated: true };
+    }, 500);
+    this.gameInterface.launch();
+  }
+  get currentPlayer() {
+    if (!this.user.authenticated) {
+      return null;
+    }
+    if (!this.gameInterface.gameInitialized) {
+      return null;
+    }
+    if (!this.gameInterface.gameState.players[this.user.id]) {
+      return null;
+    }
+
+    return this.gameInterface.gameState.players[this.user.id];
+  }
+}
+</script>
 
 <style>
 #app {
@@ -15,17 +52,5 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
 }
 </style>
